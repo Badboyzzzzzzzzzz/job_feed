@@ -73,6 +73,7 @@ class _JobFeedScreenState extends State<JobFeedScreen> {
   }
 
   void _fetchJobPosts({String? search}) {
+    FocusScope.of(context).unfocus();
     context.read<JobPostProvider>().fetchJobPosts(
       languageCode: _selectedLanguage,
       search: search,
@@ -250,6 +251,7 @@ class _JobFeedScreenState extends State<JobFeedScreen> {
                           onSelected: (String value) {
                             setState(() {
                               _selectedLanguage = value;
+
                               /// Reset filter options when language changes
                               _filterOptionsLoaded = false;
                               _selectedProvince = null;
@@ -343,6 +345,7 @@ class _JobFeedScreenState extends State<JobFeedScreen> {
                             margin: const EdgeInsets.only(right: 2),
                             child: ElevatedButton(
                               onPressed: () {
+                                FocusScope.of(context).unfocus();
                                 _fetchJobPosts(search: _searchController.text);
                               },
                               style: ElevatedButton.styleFrom(
@@ -389,23 +392,32 @@ class _JobFeedScreenState extends State<JobFeedScreen> {
                                 FilterChipWidget(
                                   icon: Icons.location_on_outlined,
                                   label: 'ទីតាំង',
-                                  onTap: () =>
-                                      _showLocationFilter(_allProvinces),
+                                  onTap: () {
+                                    FocusScope.of(context).unfocus();
+                                    _showLocationFilter(_allProvinces);
+                                  },
                                 ),
                                 const SizedBox(width: 8),
                                 FilterChipWidget(
                                   icon: Icons.work_outline,
                                   label: 'ប្រភេទការងារ',
-                                  onTap: () =>
-                                      _showWorkTypeFilter(_allWorkTypes),
+                                  onTap: () {
+                                    FocusScope.of(context).unfocus();
+
+                                    _showWorkTypeFilter(_allWorkTypes);
+                                  },
                                 ),
                                 const SizedBox(width: 8),
                                 FilterChipWidget(
                                   icon: Icons.trending_up,
                                   label: 'បទពិសោធន៍',
-                                  onTap: () => _showExperienceLevelFilter(
-                                    _allExperienceLevels,
-                                  ),
+                                  onTap: () {
+                                    FocusScope.of(context).unfocus();
+
+                                    _showExperienceLevelFilter(
+                                      _allExperienceLevels,
+                                    );
+                                  },
                                 ),
                               ],
                             ),
@@ -424,13 +436,7 @@ class _JobFeedScreenState extends State<JobFeedScreen> {
                             color: Colors.white,
                             iconSize: 20,
                             onPressed: () {
-                              // Clear all filters
-                              setState(() {
-                                _selectedProvince = null;
-                                _selectedWorkType = null;
-                                _selectedExperienceLevel = null;
-                              });
-                              _fetchJobPosts(search: _searchController.text);
+                              
                             },
                           ),
                         ),
@@ -465,7 +471,10 @@ class _JobFeedScreenState extends State<JobFeedScreen> {
                           size: 48,
                         ),
                         const SizedBox(height: 16),
-                        Text('មានអ្វីមួយកើតមានកំហុស', textAlign: TextAlign.center),
+                        Text(
+                          'មានអ្វីមួយកើតមានកំហុស',
+                          textAlign: TextAlign.center,
+                        ),
                         const SizedBox(height: 16),
                         ElevatedButton(
                           onPressed: () => _fetchJobPosts(),

@@ -160,6 +160,7 @@ class _JobFeedFilterDialogState<T> extends State<JobFeedFilterDialog<T>> {
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () {
+                      FocusScope.of(context).unfocus();
                       Navigator.of(context).pop(_selectedItem);
                       widget.onApply?.call(_selectedItem);
                     },
